@@ -1,5 +1,6 @@
+import config from "./config.json" with { type: "json" };
 import { MongoClient } from "mongodb";
-import { fetchSubito } from "./subitoApi";
+import { fetchSubito } from "./subitoApi.js";
 
 // Database connection
 if (!process.env.DB_URL) {
@@ -11,6 +12,7 @@ await client.connect();
 const db = client.db("subiscrapebot");
 const adsCollection = db.collection("ads");
 
+//* Should be in database
 const alerts = [
   {
     query: "iphone",
@@ -46,6 +48,8 @@ while (true) {
         const existingAd = await adsCollection.findOne({ url: ad.url });
         if (!existingAd) {
           await adsCollection.insertOne(ad);
+
+          //* Will be replaced with Telegram notification system
           console.log(`Found new AD (${alert.query}):`, ad.title);
         }
       }
@@ -54,7 +58,6 @@ while (true) {
     }
   }
 
-  // Wait 30 seconds before next fetch 
-  //* Should be configurable
-  await new Promise((resolve) => setTimeout(resolve, 30000));
+  // Waits fetchInterval milliseconds before next fetch 
+  await new Promise((resolve) => setTimeout(resolve, config.fetchInterval));
 }
