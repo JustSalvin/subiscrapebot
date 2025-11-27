@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "bun ./app/main.ts"
+  },
+  "dependencies": {
+    "@types/node": "^24.10.1",
+    "sqlite3": "^5.1.7"
+  }
+}

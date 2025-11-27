@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "name": "MOTORI"
+  },
+  {
+    "id": 2,
+    "name": "Auto"
+  },
+  {
+    "id": 3,
+    "name": "Moto e Scooter"
+  },
+  {
+    "id": 4,
+    "name": "Veicoli commerciali"
+  },
+  {
+    "id": 5,
+    "name": "Accessori Auto"
+  },
+  {
+    "id": 6,
+    "name": "IMMOBILI"
+  },
+  {
+    "id": 7,
+    "name": "Appartamenti"
+  },
+  {
+    "id": 8,
+    "name": "Uffici e Locali commerciali"
+  },
+  {
+    "id": 9,
+    "name": "ELETTRONICA"
+  },
+  {
+    "id": 10,
+    "name": "Informatica"
+  },
+  {
+    "id": 11,
+    "name": "Audio/Video"
+  },
+  {
+    "id": 12,
+    "name": "Telefonia"
+  },
+  {
+    "id": 13,
+    "name": "PER LA CASA e LA PERSONA"
+  },
+  {
+    "id": 14,
+    "name": "Arredamento e Casalinghi"
+  },
+  {
+    "id": 15,
+    "name": "Giardino e Fai da te"
+  },
+  {
+    "id": 16,
+    "name": "Abbigliamento e Accessori"
+  },
+  {
+    "id": 17,
+    "name": "Tutto per i bambini"
+  },
+  {
+    "id": 18,
+    "name": "SPORTS E HOBBY"
+  },
+  {
+    "id": 19,
+    "name": "Musica e Film"
+  },
+  {
+    "id": 20,
+    "name": "Sports"
+  },
+  {
+    "id": 21,
+    "name": "Collezionismo"
+  },
+  {
+    "id": 22,
+    "name": "Nautica"
+  },
+  {
+    "id": 23,
+    "name": "Animali"
+  },
+  {
+    "id": 24,
+    "name": "LAVORO E SERVIZI"
+  },
+  {
+    "id": 25,
+    "name": "Attrezzature di lavoro"
+  },
+  {
+    "id": 26,
+    "name": "Offerte di lavoro"
+  },
+  {
+    "id": 27,
+    "name": "ALTRI ANNUNCI"
+  },
+  {
+    "id": 28,
+    "name": "Altri"
+  },
+  {
+    "id": 29,
+    "name": "Ville singole e a schiera"
+  },
+  {
+    "id": 30,
+    "name": "Terreni e rustici"
+  },
+  {
+    "id": 31,
+    "name": "Garage e box"
+  },
+  {
+    "id": 32,
+    "name": "Loft, mansarde e altro"
+  },
+  {
+    "id": 33,
+    "name": "Case vacanza"
+  },
+  {
+    "id": 34,
+    "name": "Caravan e Camper"
+  },
+  {
+    "id": 36,
+    "name": "Accessori Moto"
+  },
+  {
+    "id": 37,
+    "name": "Elettrodomestici"
+  },
+  {
+    "id": 38,
+    "name": "Libri e Riviste"
+  },
+  {
+    "id": 39,
+    "name": "Strumenti Musicali"
+  },
+  {
+    "id": 40,
+    "name": "Fotografia"
+  },
+  {
+    "id": 41,
+    "name": "Biciclette"
+  },
+  {
+    "id": 42,
+    "name": "Candidati in cerca di lavoro"
+  },
+  {
+    "id": 43,
+    "name": "Camere/Posti letto"
+  },
+  {
+    "id": 44,
+    "name": "Console e Videogiochi"
+  },
+  {
+    "id": 50,
+    "name": "Servizi"
+  },
+  {
+    "id": 100,
+    "name": "Accessori per animali"
+  }
+]
