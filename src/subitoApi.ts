@@ -28,24 +28,19 @@ function queryBuilder(params: Params) {
   return query.toString();
 }
 
-export const fetchSubito = async (params: Params) => {
-  const headers = {
-    "X-Subito-Channel": "web",
-  };
+export async function fetchSubito(params: Params) {
+  const headers = { "X-Subito-Channel": "web" };
   const url = `https://hades.subito.it/v1/search/items?${queryBuilder(params)}`;
 
-  console.log("Fetch URL:", url);
-  const res = await fetch(
-    url,
-    {
+  console.log("Fetching URL:", url);
+  const res = await fetch(url, {
       headers: headers,
       method: "GET",
-    },
-  );
+  });
 
   if (!res.ok) {
     throw new Error(
-      `Failed to fetch Subito: ${res.status} ${res.statusText}`,
+      `Failed to fetch: ${res.status} ${res.statusText}`,
     );
   }
 

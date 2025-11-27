@@ -1,3 +1,4 @@
 node_modules
+out_debug
 bun.lock
-output.json
+.env

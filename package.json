@@ -1,9 +1,11 @@
 {
+  "type": "module",
   "scripts": {
-    "start": "bun ./app/main.ts"
+    "start": "bun ./src/main.ts"
   },
   "dependencies": {
     "@types/node": "^24.10.1",
-    "sqlite3": "^5.1.7"
+    "dotenv": "^17.2.3",
+    "mongodb": "^7.0.0"
   }
 }
