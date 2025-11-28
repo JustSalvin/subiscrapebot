@@ -1,37 +1,25 @@
 import config from "./config.json" with { type: "json" };
-import { MongoClient } from "mongodb";
+import { Database } from "./db.js";
 import { fetchSubito } from "./subitoApi.js";
+import { bot } from "./bot/bot.js";
 
-// Database connection
-if (!process.env.DB_URL) {
-  throw new Error("DB_URL environment variable is not set.");
-}
+// Database
+const db = await Database.getDb();
+await Database.init(db);
 
-const client = new MongoClient(process.env.DB_URL);
-await client.connect();
-const db = client.db("subiscrapebot");
-const adsCollection = db.collection("ads");
-
-//* Should be in database
-const alerts = [
-  {
-    query: "iphone",
-    sortOrder: "datedesc",
-  },
-
-  {
-    query: "ps5",
-    sortOrder: "datedesc",
-  }
-];
+// Bot
+bot.launch();
 
 // Main loop
 while (true) {
+  const alerts = await db.collection("alerts").find().toArray()
+
   for (const alert of alerts) {
     try {
       const data = await fetchSubito({
         query: alert.query,
-        sortOrder: alert.sortOrder,
+        sortOrder: 'datedesc',
+        shippingOnly: true
       })
 
       //* Should save raw ads instead?
@@ -45,11 +33,14 @@ while (true) {
       }));
       
       for (const ad of ads) {
-        const existingAd = await adsCollection.findOne({ url: ad.url });
+        const existingAd = await db.collection("ads").findOne({ url: ad.url });
         if (!existingAd) {
-          await adsCollection.insertOne(ad);
+          await db.collection("ads").insertOne(ad);
 
-          //* Will be replaced with Telegram notification system
+          for (const userId of config.authorizedUsers) {
+            bot.telegram.sendMessage(userId, `Found new AD (${alert.query}): ${ad.title}`);
+          }
+
           console.log(`Found new AD (${alert.query}):`, ad.title);
         }
       }
