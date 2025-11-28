@@ -1,54 +1,49 @@
-import config from "./config.json" with { type: "json" };
-import { Database } from "./db.js";
-import { fetchSubito } from "./subitoApi.js";
-import { bot } from "./bot/bot.js";
+import config from './config.json' with { type: "json" };
+import messages from './messages.json' with { type: "json" };
+import { template } from './utils.js';
+import { Database } from './services/db.js';
+import { Scenes, Telegraf, session } from 'telegraf';
+import { checkAuth } from './middlewares/check_auth.js';
+import { checkArgs } from './middlewares/check_args.js';
+import { alertConfigScene } from './scenes/alert_config.js';
+import { watchSubito } from './watchers/subito.js';
+import { addAlert } from './commands/add_alert.js';
+import { removeAlert } from './commands/remove_alert.js';
+import { listAlerts } from './commands/list_alerts.js';
+import { help } from './commands/help.js';
+import { start } from './commands/start.js';
 
-// Database
 const db = await Database.getDb();
 await Database.init(db);
 
-// Bot
-bot.launch();
+if (!process.env.BOT_TOKEN) throw new Error("BOT_TOKEN environment variable is not set.");
+export const bot = new Telegraf(process.env.BOT_TOKEN);
+const stage = new Scenes.Stage([alertConfigScene]);
 
-// Main loop
-while (true) {
-  const alerts = await db.collection("alerts").find().toArray()
+// Middlewares
+bot.use(checkAuth(config.authorizedUsers));
+bot.use(session());
+bot.use(stage.middleware());
 
-  for (const alert of alerts) {
-    try {
-      const data = await fetchSubito({
-        query: alert.query,
-        sortOrder: 'datedesc',
-        shippingOnly: true
-      })
+// Commands
+bot.command('add', checkArgs(1, messages.add_usage), addAlert);
+bot.command('edit', checkArgs(1, messages.edit_usage) /* wip */);
+bot.command('remove', checkArgs(1, messages.remove_usage), removeAlert);
+bot.command('list', listAlerts);
+bot.command('help', help);
+bot.command('start', start);
 
-      //* Should save raw ads instead?
-      const ads = data.ads.map((ad: any) => ({
-        url: ad.urls.default || null,
-        title: ad.subject,
-        description: ad.body,
-        image: `${ad.images?.[0]?.cdn_base_url}?rule=card-desktop-new-small-1x-auto` || null,
-        price: ad.features.find((f: any) => f.label === "Prezzo")?.values[0].value || "N/A",
-        createdAt: new Date(ad.dates.display.replace(" ", "T")) || null,
-      }));
-      
-      for (const ad of ads) {
-        const existingAd = await db.collection("ads").findOne({ url: ad.url });
-        if (!existingAd) {
-          await db.collection("ads").insertOne(ad);
-
-          for (const userId of config.authorizedUsers) {
-            bot.telegram.sendMessage(userId, `Found new AD (${alert.query}): ${ad.title}`);
-          }
-
-          console.log(`Found new AD (${alert.query}):`, ad.title);
-        }
-      }
-    } catch (err) {
-      console.error("Error fetching data:", err);
-    }
+// Watchers
+watchSubito(({ ad, alert }: any) => {
+  for (const userId of config.authorizedUsers) {
+    bot.telegram.sendMessage(userId, template(messages.ad_found, {
+      ad_link: ad.urls.default,
+      ad_title: ad.subject,
+      ad_price: `${ad.features.find((f: any) => f.label === "Prezzo")?.values[0].key}€`,
+      ad_date: ad.dates.display,
+      query: alert.query,
+    }), { parse_mode: 'HTML' })
   }
+});
 
-  // Waits fetchInterval milliseconds before next fetch 
-  await new Promise((resolve) => setTimeout(resolve, config.fetchInterval));
-}
+bot.launch();

@@ -1,0 +1,17 @@
+{
+  "unauthorized_error": "Non sei autorizzato ad usare questo bot.",
+  "bad_command_error": "Questo comando non è corretto.",
+  "alert_conflict_error": "Questo alert è già esistente.",
+  "alert_not_found_error": "Questo alert non esiste.",
+  "alert_added": "Alert aggiunto con successo!",
+  "alert_removed": "Alert rimosso con successo!",
+  "alert_list": "<b>📋 Lista degli alert</b>\n\n{{alert_list}}",
+  "alert_list_item": "- <code>{{alert_list_item}}</code>",
+  "alert_empty_list": "📭 Nessun alert presente.",
+  "ad_found": "<b><a href=\"{{ad_link}}\">{{ad_title}}</a></b>\nQuery generatrice:  <code>{{query}}</code>\n\n💸 Prezzo:  <b>{{ad_price}}</b>\n📅 Pubblicato il:  <b>{{ad_date}}</b>\n",
+  "add_usage": "<i>/add &lt;query&gt;</i>",
+  "edit_usage": "<i>/edit &lt;query&gt;</i>",
+  "remove_usage": "<i>/remove &lt;query&gt;</i>",
+  "help": "📘 <b>Guida ai comandi</b>\n\n<i>/add &lt;query&gt;</i> - aggiungi un alert\n<i>/edit &lt;query&gt;</i> - modifica un alert\n<i>/remove &lt;query&gt;</i> - rimuovi un alert\n<i>/list</i> - mostra la lista degli alert\n<i>/help</i> - mostra la guida ai comandi",
+  "start": "👋 <b>Benvenuto {{user_name}}!</b>\n\n<b>{{bot_name}}</b> permette di creare <b>alert automatici</b> basati sulle ricerche di Subito.it.\n\nPuoi configurare una o più query e il bot controllerà periodicamente gli annunci, notificandoti quando compaiono nuovi risultati che corrispondono ai tuoi criteri.\n\nDigita /help per la guida ai comandi."
+}

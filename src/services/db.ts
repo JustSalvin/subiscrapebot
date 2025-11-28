@@ -6,15 +6,9 @@ export class Database {
 
   static async getDb() {
     if (Database.db) return Database.db;
+    if (!process.env.DB_URL) throw new Error("DB_URL environment variable is not set.");
+    if (!process.env.DB_NAME) throw new Error("DB_NAME environment variable is not set.");
 
-    if (!process.env.DB_URL) {
-      throw new Error("DB_URL environment variable is not set.");
-    }
-    if (!process.env.DB_NAME) {
-      throw new Error("DB_NAME environment variable is not set.");
-    }
-
-    // Connessione
     Database.client = new MongoClient(process.env.DB_URL);
     await Database.client.connect();
     Database.db = Database.client.db(process.env.DB_NAME);
