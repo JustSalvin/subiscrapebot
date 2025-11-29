@@ -13,5 +13,5 @@
 	"edit_usage": "<i>/edit &lt;query&gt;</i>",
 	"remove_usage": "<i>/remove &lt;query&gt;</i>",
 	"help": "📘 <b>Guida ai comandi</b>\n\n<i>/add &lt;query&gt;</i> - aggiungi un alert\n<i>/edit &lt;query&gt;</i> - modifica un alert\n<i>/remove &lt;query&gt;</i> - rimuovi un alert\n<i>/list</i> - mostra la lista degli alert\n<i>/help</i> - mostra la guida ai comandi",
-	"start": "👋 <b>Benvenuto {{user_name}}!</b>\n\n<b>{{bot_name}}</b> permette di creare <b>alert automatici</b> basati sulle ricerche di Subito.it.\n\nPuoi configurare una o più query e il bot controllerà periodicamente gli annunci, notificandoti quando compaiono nuovi risultati che corrispondono ai tuoi criteri.\n\nDigita /help per la guida ai comandi."
+	"start": "👋 <b>Benvenuto {{user_name}}!</b>\n\n<b>{{bot_name}}</b> permette di creare <b>alert automatici</b> basati sulle ricerche di Subito.it.\n\nPuoi configurare uno o più alert e il bot controllerà periodicamente gli annunci, notificandoti quando compaiono nuovi risultati che corrispondono ai tuoi criteri.\n\nDigita /help per la guida ai comandi."
 }
