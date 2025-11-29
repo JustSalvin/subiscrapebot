@@ -1,26 +1,31 @@
-import { MongoClient, Db } from "mongodb";
+import { type Db, MongoClient } from "mongodb";
 
-export class Database {
-  static client: MongoClient;
-  static db: Db;
+let client: MongoClient | null = null;
+let db: Db | null = null;
 
-  static async getDb() {
-    if (Database.db) return Database.db;
-    if (!process.env.DB_URL) throw new Error("DB_URL environment variable is not set.");
-    if (!process.env.DB_NAME) throw new Error("DB_NAME environment variable is not set.");
+export async function getDb(): Promise<Db> {
+	if (db) return db;
 
-    Database.client = new MongoClient(process.env.DB_URL);
-    await Database.client.connect();
-    Database.db = Database.client.db(process.env.DB_NAME);
+	if (!process.env.DB_URL) {
+		throw new Error("DB_URL environment variable is not set.");
+	}
+	if (!process.env.DB_NAME) {
+		throw new Error("DB_NAME environment variable is not set.");
+	}
 
-    return Database.db;
-  }
+	client = new MongoClient(process.env.DB_URL);
+	await client.connect();
+	db = client.db(process.env.DB_NAME);
 
-  static async init(db: Db) {
-    console.log("Running database initialization...");
+	return db;
+}
 
-    await db.collection("alerts").createIndex({ query: 1 }, { unique: true })
+export async function initDatabase(database: Db): Promise<void> {
+	console.log("Running database initialization...");
 
-    console.log("Database initialized.");
-  }
+	await database
+		.collection("alerts")
+		.createIndex({ query: 1 }, { unique: true });
+
+	console.log("Database initialized.");
 }
