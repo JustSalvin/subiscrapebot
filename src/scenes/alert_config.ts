@@ -1,7 +1,9 @@
 import { type Context, Markup, Scenes } from "telegraf";
 import categories from "../assets/categories.json" with { type: "json" };
+import messages from "../assets/messages.json" with { type: "json" };
 import { getDb } from "../services/db.js";
 import type { Alert } from "../types/alert.js";
+import { template } from "../utils.js";
 
 export const alertConfigScene = new Scenes.BaseScene("alert_config");
 
@@ -14,30 +16,36 @@ function renderAlertConfig(alert: Alert) {
 		return cat.id === alert.categoryId;
 	})?.name;
 
+	const category = categoryName ?? messages.alert_config_category_not_set;
+	const priceMin = alert.priceMin ? `${alert.priceMin}€` : messages.alert_config_no_limit;
+	const priceMax = alert.priceMax ? `${alert.priceMax}€` : messages.alert_config_no_limit;
+	const urgentOnly = alert.urgentOnly ? messages.alert_config_yes : messages.alert_config_no;
+	const titleOnly = alert.titleSearchOnly ? messages.alert_config_yes : messages.alert_config_no;
+
 	return [
-		`🛠️ <b>Configurazione Alert</b>`,
-		`Query: <code>${alert.query}</code>`,
-		``,
-		`Categoria: <b>${categoryName ?? "❌ Non impostata"}</b>`,
-		`Prezzo min: <b>${alert.priceMin ?? "❌ Nessun limite"}</b>`,
-		`Prezzo max: <b>${alert.priceMax ?? "❌ Nessun limite"}</b>`,
-		`Solo urgenti: <b>${alert.urgentOnly ? "✅ Sì" : "❌ No"}</b>`,
-		`Solo titolo: <b>${alert.titleSearchOnly ? "✅ Sì" : "❌ No"}</b>`,
-		``,
-		`📌 Scegli cosa vuoi configurare:`,
+		messages.alert_config_title,
+		template(messages.alert_config_query, { query: alert.query }),
+		"",
+		template(messages.alert_config_category, { category }),
+		template(messages.alert_config_price_min, { price_min: priceMin }),
+		template(messages.alert_config_price_max, { price_max: priceMax }),
+		template(messages.alert_config_urgent_only, { urgent_only: urgentOnly }),
+		template(messages.alert_config_title_only, { title_only: titleOnly }),
+		"",
+		messages.alert_config_choose_option,
 	].join("\n");
 }
 
 function buildKeyboard() {
 	return Markup.inlineKeyboard([
-		[Markup.button.callback("🗂️ Categoria", "category")],
-		[Markup.button.callback("💶 Prezzo minimo", "min_price")],
-		[Markup.button.callback("💰 Prezzo massimo", "max_price")],
-		[Markup.button.callback("🚨 Solo urgenti", "urgent_only")],
-		[Markup.button.callback("🔍 Solo nel titolo", "title_only")],
+		[Markup.button.callback(messages.alert_config_button_category, "category")],
+		[Markup.button.callback(messages.alert_config_button_min_price, "min_price")],
+		[Markup.button.callback(messages.alert_config_button_max_price, "max_price")],
+		[Markup.button.callback(messages.alert_config_button_urgent_only, "urgent_only")],
+		[Markup.button.callback(messages.alert_config_button_title_only, "title_only")],
 		[
-			Markup.button.callback("❌ Annulla", "cancel"),
-			Markup.button.callback("💾 Salva alert", "save"),
+			Markup.button.callback(messages.alert_config_button_cancel, "cancel"),
+			Markup.button.callback(messages.alert_config_button_save, "save"),
 		],
 	]);
 }
@@ -106,18 +114,18 @@ async function showCategoryPage(ctx: Context) {
 	]);
 
 	const nav = [];
-	if (page > 0) nav.push(Markup.button.callback("⬅️ Indietro", "cat_prev"));
+	if (page > 0) nav.push(Markup.button.callback(messages.alert_config_button_back, "cat_prev"));
 	if (start + perPage < categories.length)
-		nav.push(Markup.button.callback("➡️ Avanti", "cat_next"));
+		nav.push(Markup.button.callback(messages.alert_config_button_next, "cat_next"));
 
 	await ctx.editMessageText(
-		`🗂️ <b>Seleziona una categoria</b>\nPagina ${page + 1}`,
+		template(messages.alert_config_select_category, { page: page + 1 }),
 		{
 			parse_mode: "HTML",
 			...Markup.inlineKeyboard([
 				...rows,
 				nav,
-				[Markup.button.callback("🔙 Torna indietro", "back_main")],
+				[Markup.button.callback(messages.alert_config_button_back_main, "back_main")],
 			]),
 		},
 	);
@@ -150,7 +158,7 @@ alertConfigScene.action(/cat_(\d+)/, async (ctx) => {
 alertConfigScene.action("min_price", async (ctx) => {
 	ctx.scene.state.step = "min_price";
 	await ctx.editMessageText(
-		"💶 <b>Inserisci il prezzo minimo</b>\nScrivi un numero o '0' per nessun limite.",
+		messages.alert_config_min_price_prompt,
 		{ parse_mode: "HTML" },
 	);
 });
@@ -158,7 +166,7 @@ alertConfigScene.action("min_price", async (ctx) => {
 alertConfigScene.action("max_price", async (ctx) => {
 	ctx.scene.state.step = "max_price";
 	await ctx.editMessageText(
-		"💰 <b>Inserisci il prezzo massimo</b>\nScrivi un numero o '0' per nessun limite.",
+		messages.alert_config_max_price_prompt,
 		{ parse_mode: "HTML" },
 	);
 });
@@ -169,7 +177,7 @@ alertConfigScene.on("text", async (ctx) => {
 
 	const value = parseInt(ctx.message.text, 10);
 	if (Number.isNaN(value) || value < 0) {
-		await ctx.reply("❌ Inserisci un numero valido.");
+		await ctx.reply(messages.alert_config_invalid_number);
 		return;
 	}
 
@@ -194,12 +202,12 @@ alertConfigScene.action("save", async (ctx) => {
 		.collection("alerts")
 		.updateOne({ query: alert.query }, { $set: alert }, { upsert: true });
 
-	await ctx.editMessageText("✅ Alert salvato!", { parse_mode: "HTML" });
+	await ctx.editMessageText(messages.alert_config_saved, { parse_mode: "HTML" });
 	await ctx.scene.leave();
 });
 
 alertConfigScene.action("cancel", async (ctx) => {
-	await ctx.editMessageText("❌ Operazione annullata.", { parse_mode: "HTML" });
+	await ctx.editMessageText(messages.alert_config_cancelled, { parse_mode: "HTML" });
 	await ctx.scene.leave();
 });
 

@@ -7,7 +7,7 @@ export async function listAlerts(ctx: Context) {
 	const db = await getDb();
 	const alerts = await db.collection("alerts").find().toArray();
 	if (alerts.length === 0) {
-		await ctx.replyWithHTML(messages.empty_alert_list);
+		await ctx.replyWithHTML(messages.alert_list_empty);
 		return;
 	}
 
