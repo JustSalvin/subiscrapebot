@@ -1,5 +1,5 @@
 import type { Context } from "telegraf";
-import messages from "../messages.json" with { type: "json" };
+import messages from "../assets/messages.json" with { type: "json" };
 import { getDb } from "../services/db.js";
 import { template } from "../utils.js";
 

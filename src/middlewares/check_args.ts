@@ -1,5 +1,5 @@
 import type { Context, MiddlewareFn } from "telegraf";
-import messages from "../messages.json" with { type: "json" };
+import messages from "../assets/messages.json" with { type: "json" };
 
 export function checkArgs(
 	minArgs: number,

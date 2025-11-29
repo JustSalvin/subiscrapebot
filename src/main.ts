@@ -1,4 +1,5 @@
 import { Scenes, session, Telegraf } from "telegraf";
+import messages from "./assets/messages.json" with { type: "json" };
 import { addAlert } from "./commands/add_alert.js";
 import { editAlert } from "./commands/edit_alert.js";
 import { help } from "./commands/help.js";
@@ -6,7 +7,6 @@ import { listAlerts } from "./commands/list_alerts.js";
 import { removeAlert } from "./commands/remove_alert.js";
 import { start } from "./commands/start.js";
 import config from "./config.json" with { type: "json" };
-import messages from "./messages.json" with { type: "json" };
 import { checkArgs } from "./middlewares/check_args.js";
 import { checkAuth } from "./middlewares/check_auth.js";
 import { alertConfigScene } from "./scenes/alert_config.js";

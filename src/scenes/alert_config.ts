@@ -1,5 +1,5 @@
 import { type Context, Markup, Scenes } from "telegraf";
-import categories from "../categories.json" with { type: "json" };
+import categories from "../assets/categories.json" with { type: "json" };
 import { getDb } from "../services/db.js";
 import type { Alert } from "../types/alert.js";
 
