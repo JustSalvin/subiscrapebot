@@ -86,7 +86,7 @@ bun start
    - Toggle "title-only search" mode
 3. Save the alert configuration
 
-### How It Works
+## How It Works
 
 - The bot continuously monitors all configured alerts
 - Every `fetchInterval` milliseconds, it checks Subito.it for new listings

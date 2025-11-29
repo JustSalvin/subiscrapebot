@@ -3,9 +3,8 @@ import messages from "../assets/messages.json" with { type: "json" };
 import { getDb } from "../services/db.js";
 import { template } from "../utils.js";
 
-const db = await getDb();
-
 export async function listAlerts(ctx: Context) {
+	const db = await getDb();
 	const alerts = await db.collection("alerts").find().toArray();
 	if (alerts.length === 0) {
 		await ctx.replyWithHTML(messages.empty_alert_list);

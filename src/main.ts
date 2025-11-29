@@ -10,16 +10,16 @@ import config from "./config.json" with { type: "json" };
 import { checkArgs } from "./middlewares/check_args.js";
 import { checkAuth } from "./middlewares/check_auth.js";
 import { alertConfigScene } from "./scenes/alert_config.js";
-import { getDb, initDatabase } from "./services/db.js";
+import { connectToDb, getDb, initDb } from "./services/db.js";
+import { logger } from "./services/logger.js";
 import { template } from "./utils.js";
 import { watchSubito } from "./watchers/subito.js";
 
-const db = await getDb();
-await initDatabase(db);
+await connectToDb(process.env.DB_URL!);
+await initDb(await getDb());
 
-if (!process.env.BOT_TOKEN)
-	throw new Error("BOT_TOKEN environment variable is not set.");
-export const bot = new Telegraf(process.env.BOT_TOKEN);
+logger.info("Starting bot...");
+export const bot = new Telegraf(process.env.BOT_TOKEN!);
 const stage = new Scenes.Stage([alertConfigScene]);
 
 // Middlewares
@@ -53,3 +53,4 @@ watchSubito(({ ad, alert }) => {
 });
 
 bot.launch();
+logger.success("Bot launched.");

@@ -3,7 +3,6 @@ import categories from "../assets/categories.json" with { type: "json" };
 import { getDb } from "../services/db.js";
 import type { Alert } from "../types/alert.js";
 
-const db = await getDb();
 export const alertConfigScene = new Scenes.BaseScene("alert_config");
 
 // ======================
@@ -188,6 +187,7 @@ alertConfigScene.on("text", async (ctx) => {
 // ======================
 
 alertConfigScene.action("save", async (ctx) => {
+	const db = await getDb();
 	const alert = ctx.scene.state.alert;
 
 	await db

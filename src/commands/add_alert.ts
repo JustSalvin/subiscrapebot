@@ -3,9 +3,8 @@ import type { Context } from "telegraf";
 import messages from "../assets/messages.json" with { type: "json" };
 import { getDb } from "../services/db.js";
 
-const db = await getDb();
-
 export async function addAlert(ctx: Context) {
+	const db = await getDb();
 	const query = ctx.state.args.join(" ");
 
 	try {

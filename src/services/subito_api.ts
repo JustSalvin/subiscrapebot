@@ -1,3 +1,5 @@
+import { logger } from "./logger.js";
+
 type Params = {
 	query: string; // q
 	categoryId?: number; // c
@@ -36,7 +38,7 @@ export async function fetchSubito(params: Params) {
 	const headers = { "X-Subito-Channel": "web" };
 	const url = `https://hades.subito.it/v1/search/items?${queryBuilder(params)}`;
 
-	console.log("Fetching URL:", url);
+	logger.info("Fetching URL", { url });
 	const res = await fetch(url, {
 		headers: headers,
 		method: "GET",

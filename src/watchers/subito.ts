@@ -1,12 +1,14 @@
 import config from "../config.json" with { type: "json" };
 import { getDb } from "../services/db.js";
+import { logger } from "../services/logger.js";
 import { fetchSubito } from "../services/subito_api.js";
 import type { Alert } from "../types/alert.js";
 
-const db = await getDb();
-
 type WatchCallback = (data: { ad: any; alert: Alert }) => void;
+
 export async function watchSubito(callback: WatchCallback) {
+	const db = await getDb();
+
 	while (true) {
 		const alerts = await db.collection<Alert>("alerts").find().toArray();
 
@@ -31,18 +33,12 @@ export async function watchSubito(callback: WatchCallback) {
 
 					await db.collection("ads").insertOne({ id, ...ad });
 					callback({ ad, alert });
-
-					console.log(
-						`Found new ad (Generative query: ${alert.query}):`,
-						ad.urls.default,
-					);
 				}
 			} catch (err) {
-				console.error("Error fetching data:", err);
+				logger.error("Error fetching data", { error: err });
 			}
 		}
 
-		// Waits fetchInterval milliseconds before next fetch
 		await new Promise((resolve) => setTimeout(resolve, config.fetchInterval));
 	}
 }
