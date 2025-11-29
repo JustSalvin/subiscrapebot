@@ -33,7 +33,7 @@ bot.command("edit", checkArgs(1, messages.edit_usage), editAlert);
 bot.command("remove", checkArgs(1, messages.remove_usage), removeAlert);
 bot.command("list", listAlerts);
 bot.command("help", help);
-bot.command("start", start);
+bot.start(start);
 
 // Watchers
 watchSubito(({ ad, alert }) => {
