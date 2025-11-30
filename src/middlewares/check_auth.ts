@@ -8,7 +8,7 @@ export function checkAuth(authorizedUsers: number[]): MiddlewareFn<Context> {
 		if (typeof userId !== "number") return;
 		if (!authorizedUsers.includes(userId)) {
 			ctx.state.role = "unauthorized";
-			await ctx.reply(messages.unauthorized);
+			return await ctx.reply(messages.unauthorized);
 		}
 
 		ctx.state.role = "authorized";
